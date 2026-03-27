@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Список пользователей</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #f4f4f4; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: #007bff; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <a href="{{ url_for('simple_page.index')}}" class="back-link">← На главную</a>
+    
+    <h1>Зарегистрированные пользователи</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Логин</th>
+                <th>Пароль (хеш)</th>
+                <th>Роль</th>
+            </tr>
+        </thead>
+        <tbody>
+            {# Цикл перебора пользователей, переданных из функции get_users #}
+            {% for user in users %}
+            <tr>
+                <td>{{ user['id'] }}</td>
+                <td>{{ user['username'] }}</td>
+                <td>{{ user['password'] }}</td>
+                <td>{{ user['role'] }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="3">Пользователей пока нет.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
