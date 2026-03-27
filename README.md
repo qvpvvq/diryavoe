@@ -1,6 +1,6 @@
 # diryavoe
 1. Соберите образ:
-**docker build -t sqli-app**
+**docker build -t sqli-app .**
 2. Запустите контейнер:
 **docker run -p 5000:5000 sqli-app**
 3. Чек адрес
