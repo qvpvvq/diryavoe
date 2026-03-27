@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="text-danger mb-4">Панель администратора</h2>
+        
+        <div class="card shadow-sm mb-5">
+            <div class="card-header bg-dark text-white">Список пользователей</div>
+            <div class="card-body">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Логин</th>
+                            <th>Пароль</th>
+                            <th>Роль</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>{{ user['id'] }}</td>
+                            <td><strong>{{ user['username'] }}</strong></td>
+                            <td><code>{{ user['password'] }}</code></td>
+                            <td><span class="badge bg-secondary">{{ user['role'] }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">Управление лентой</div>
+            <div class="card-body">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Автор</th>
+                            <th>Контент</th>
+                            <th>Действие</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for post in posts %}
+                        <tr>
+                            <td>@{{ post['username'] }}</td>
+                            <td>{{ post['content'] | truncate(100) | safe }}</td>
+                            <td>
+                                <a href="/admin/delete/{{ post['id'] }}" class="btn btn-danger btn-sm">Удалить</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
