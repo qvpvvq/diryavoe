@@ -40,7 +40,6 @@ def register():
         role = request.form.get('role', 'user')
 
         db = get_db()
-        
         check_user = db.execute(f"SELECT * FROM users WHERE username = '{username}'").fetchone()
         
         if check_user:
