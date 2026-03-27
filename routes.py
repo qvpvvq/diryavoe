@@ -53,3 +53,19 @@ def register():
                 error = f"Ошибка при регистрации: {e}"
 
     return render_template("register.html", error=error)
+
+@simple_page.route("/search", methods=['GET', 'POST'])
+def search():
+    query = request.args.get('q') or request.form.get('q', '')
+    users = []
+
+    if query:
+        db = get_db()
+        sql = f"SELECT username FROM users WHERE username LIKE '%{query}%'"
+        
+        try:
+            users = db.execute(sql).fetchall()
+        except Exception as e:
+            return f"<h1>SQL Error:</h1><pre>{e}</pre>" # подарок
+
+    return render_template("search.html", users=users, query=query)
