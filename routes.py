@@ -1,17 +1,24 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, session
 from database import get_db
 
 simple_page = Blueprint('simple_page', __name__)
 
-@simple_page.route("/")
+@simple_page.route("/", methods=["GET", "POST"])
 def index():
-    return render_template("index.html")
-
-@simple_page.route("/users")
-def get_users():
     db = get_db()
-    users = db.execute('SELECT * FROM users').fetchall()
-    return render_template('users.html', users=users)
+    
+    if request.method == 'POST':
+        username = session.get('username')
+        content = request.form.get('content')
+        
+        if username and content:
+            db.execute("INSERT INTO posts (username, content) VALUES (?, ?)", (username, content))
+            db.commit()
+            return redirect(url_for('simple_page.index'))
+
+    posts = db.execute("SELECT username, content FROM posts ORDER BY id DESC").fetchall()
+    return render_template("index.html", posts=posts)
+
 
 @simple_page.route("/login", methods = ["GET", "POST"])
 def login():
@@ -26,10 +33,19 @@ def login():
         user = db.execute(query).fetchone()
         
         if user:
-            return f"<h1>Успех! Вы вошли как {user['username']} (Роль: {user['role']})</h1>"
-        else:
-            return "<h1>Ошибка! Неверный логин или пароль.</h1>"
+            session.clear() # На всякий случай чистим старое
+            session['username'] = user['username']
+            session['role'] = user['role']
+            session['user_id'] = user['id']
+            return redirect(url_for('simple_page.index'))
+        
+        return "<h1>Ошибка входа!</h1>"
     return render_template("login.html")
+
+@simple_page.route("/logout")
+def logout():
+    session.clear()  
+    return redirect(url_for('simple_page.index'))
 
 @simple_page.route("/register", methods=['GET', 'POST'])
 def register():
@@ -37,11 +53,9 @@ def register():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
-        role = 'user'  # По умолчанию все новые — обычные юзеры
+        role = request.form.get('role', 'user')
 
         db = get_db()
-        
-        # Проверяем, нет ли уже такого юзера
         check_user = db.execute(f"SELECT * FROM users WHERE username = '{username}'").fetchone()
         
         if check_user:
@@ -55,3 +69,42 @@ def register():
                 error = f"Ошибка при регистрации: {e}"
 
     return render_template("register.html", error=error)
+
+@simple_page.route("/search", methods=['GET', 'POST'])
+def search():
+    query = request.args.get('q') or request.form.get('q', '')
+    users = []
+
+    if query:
+        db = get_db()
+        sql = f"SELECT username FROM users WHERE username LIKE '%{query}%'"
+        
+        try:
+            users = db.execute(sql).fetchall()
+        except Exception as e:
+            return f"<h1>SQL Error:</h1><pre>{e}</pre>" # подарок
+
+    return render_template("search.html", users=users, query=query)
+
+@simple_page.route("/admin")
+def admin_page():
+    # Дырявая проверка: просто смотрим роль в сессии
+    if session.get('role') != 'admin':
+        return "<h1>403 Доступ запрещен! Ты не админ.</h1>", 403
+    
+    db = get_db()
+
+    
+    users = db.execute('SELECT * FROM users').fetchall()
+    posts = db.execute("SELECT * FROM posts ORDER BY id DESC").fetchall()
+    return render_template("admin.html", posts=posts, users=users)
+
+@simple_page.route("/admin/delete/<int:post_id>")
+def delete_post(post_id):
+    if session.get('role') != 'admin':
+        return "<h1>Хакер детектед!</h1>", 403
+    
+    db = get_db()
+    db.execute(f"DELETE FROM posts WHERE id = {post_id}")
+    db.commit()
+    return redirect(url_for('simple_page.admin_page'))

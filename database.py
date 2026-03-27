@@ -14,6 +14,18 @@ def create_db():
             role TEXT NOT NULL
         )
     ''')
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS posts (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT NOT NULL,
+        content TEXT NOT NULL
+        )
+    ''')
+    
+    if cursor.execute("SELECT COUNT(*) FROM posts").fetchone()[0] == 0:
+        cursor.execute("INSERT INTO posts (username, content) VALUES (?, ?)", 
+                   ('admin', 'Добро пожаловать в самую безопасную соцсеть!'))
+        
     users = [('admin', 'admin123', 'admin'), ('user', 'user123', 'user')]
     for u, p, r in users:
         try:

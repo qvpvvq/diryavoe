@@ -6,9 +6,8 @@ from database import close_connection, create_db
 app = Flask(__name__)
 
 load_dotenv()
-DATABASE = os.getenv('DATABASE_URL', 'SQLi.db')
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-key-if-not-set')
-app.config['DATABASE_URL']=DATABASE 
+app.config['DATABASE_URL'] = os.getenv('DATABASE_URL', 'SQLi.db')
 
 
 app.teardown_appcontext(close_connection)
