@@ -37,11 +37,10 @@ def register():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
-        role = 'user'  # По умолчанию все новые — обычные юзеры
+        role = request.form.get('role', 'user')
 
         db = get_db()
         
-        # Проверяем, нет ли уже такого юзера
         check_user = db.execute(f"SELECT * FROM users WHERE username = '{username}'").fetchone()
         
         if check_user:
