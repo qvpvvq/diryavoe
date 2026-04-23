@@ -1,6 +1,6 @@
 <script setup>
-import { RouterLink } from 'vue-router';
-import { isDark, toggleTheme } from "@/themeState"
+import { RouterLink } from 'vue-router'
+import { isDark, toggleTheme } from '@/themeState'
 </script>
 
 <template>
@@ -9,7 +9,7 @@ import { isDark, toggleTheme } from "@/themeState"
       <RouterLink class="navbar-brand" to="/">FakeSocial</RouterLink>
       <div class="navbar-nav ms-auto">
         <button @click="toggleTheme" class="btn nav-link btn-sm d-flex align-items-center">
-          {{ isDark ? '☀️ Светлая' : '🌙 Темная' }}
+          {{ isDark ? '🌙 Темная' : '☀️ Светлая' }}
         </button>
         <RouterLink class="nav-link" to="/search">Поиск</RouterLink>
         <RouterLink class="nav-link" to="/login">Логин</RouterLink>
