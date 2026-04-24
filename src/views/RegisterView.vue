@@ -50,7 +50,7 @@ const handleRegister = async () => {
         </button>
       </form>
       <p class="mt-4">
-        <RouterLink to="/register">Уже есть аккаунт?</RouterLink>
+        <RouterLink to="/login">Уже есть аккаунт?</RouterLink>
       </p>
       <p v-if="status">{{ status }}</p>
       <div style="margin-top: 50px; color: gray">
