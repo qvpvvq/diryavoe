@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import api from '@/api'
 import { isDark } from '@/themeState' // хз насколько норм идея так делать
 import { RouterLink } from 'vue-router'
@@ -8,15 +8,25 @@ const username = ref('')
 const password = ref('')
 const status = ref('')
 
+// как будто можно эту функцию вынести в отдельный файл, но читаемость по ощущениям хуевее будет
+const isFormValid = computed(() => {
+  return username.value.trim() != '' && password.value.trim() != ''
+})
+
+// да и эту функцию можно общей сделать, только к апи обращение по разным адресам, просто как атрибут есть варик передавать роут
 const handleLogin = async () => {
+  if (!isFormValid.value) {
+    return (status.value = 'error: Заполните все поля')
+  }
+
   try {
     const response = await api.post('/login', {
       username: username.value,
       password: password.value,
     })
-    status.value = 'ok' + (response.data.message || 'Вход выполнен')
+    status.value = 'ok: ' + (response.data.message || 'Вход выполнен')
   } catch (error) {
-    status.value = 'error' + (error.response?.data?.error || 'Сервер недоступен')
+    status.value = 'error: ' + (error.response?.data?.error || 'Сервер недоступен')
   }
 }
 </script>
@@ -32,6 +42,7 @@ const handleLogin = async () => {
         <input class="form-control mb-3" type="text" v-model="username" placeholder="Логин" />
         <input class="form-control mb-4" type="password" v-model="password" placeholder="Пароль" />
         <button
+          :disabled="!isFormValid"
           class="btn"
           :class="isDark ? 'btn-light' : 'btn-dark'"
           style="width: 50%"

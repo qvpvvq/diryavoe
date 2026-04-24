@@ -2,21 +2,29 @@
 import { isDark } from '@/themeState'
 import api from '@/api'
 import { RouterLink } from 'vue-router'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 const username = ref('')
 const password = ref('')
 const status = ref('')
 
+const isFormValid = computed(() => {
+  return username.value.trim() != '' && password.value.trim() != ''
+})
+
 const handleRegister = async () => {
+  if (!isFormValid.value) {
+    return (status.value = 'error: Заполните все поля')
+  }
+
   try {
     const response = await api.post('/register', {
       username: username.value,
       password: password.value,
     })
-    status.value = 'ok' + (response.data.message || 'Аккаунт создан')
+    status.value = 'ok: ' + (response.data.message || 'Аккаунт создан')
   } catch (error) {
-    status.value = 'error' + (error.response?.data?.error || 'Сервер недоступен')
+    status.value = 'error: ' + (error.response?.data?.error || 'Сервер недоступен')
   }
 }
 </script>
@@ -32,12 +40,13 @@ const handleRegister = async () => {
         <input class="form-control mb-3" type="text" v-model="username" placeholder="Логин" />
         <input class="form-control mb-4" type="password" v-model="password" placeholder="Пароль" />
         <button
+          :disabled="!isFormValid"
           class="btn"
           :class="isDark ? 'btn-light' : 'btn-dark'"
           style="width: 50%"
           type="submit"
         >
-          Зарегистрировться
+          Зарегистрироваться
         </button>
       </form>
       <p class="mt-4">
