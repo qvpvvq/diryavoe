@@ -51,38 +51,4 @@ const handleLogin = async () => {
   </div>
 </template>
 
-<style scoped lang="scss">
-.login-page {
-  display: flex;
-  justify-content: center;
-  padding-top: 2%;
-}
-
-.login-form {
-  width: 400px;
-  padding: 15px 10px 0px 10px;
-  border-radius: 20px;
-  background-color: white;
-
-  &.is-dark {
-    background-color: #222222;
-    color: white;
-
-    .form-control {
-      background-color: transparent !important;
-      color: white !important;
-      border: 1px solid #6c757d;
-
-      &::placeholder {
-        color: #adb5bd;
-      }
-
-      &:focus {
-        background-color: rgba(255, 255, 255, 0.05) !important;
-        border-color: #f8f9fa;
-        box-shadow: none;
-      }
-    }
-  }
-}
-</style>
+<style scoped lang="scss"></style>

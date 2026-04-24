@@ -1,18 +1,54 @@
 <script setup>
-import { RouterLink } from 'vue-router';
+import { isDark } from '@/themeState'
+import api from '@/api'
+import { RouterLink } from 'vue-router'
+import { ref } from 'vue'
+
+const username = ref('')
+const password = ref('')
+const status = ref('')
+
+const handleRegister = async () => {
+  try {
+    const response = await api.post('/register', {
+      username: username.value,
+      password: password.value,
+    })
+    status.value = 'ok' + (response.data.message || 'Аккаунт создан')
+  } catch (error) {
+    status.value = 'error' + (error.response?.data?.error || 'Сервер недоступен')
+  }
+}
 </script>
 
 <template>
-    <div class="container">
-        <h2>Создать аккаунт</h2>
-        <form method="POST">
-            <input type="text" name="username" placeholder="Придумайте логин" required><br><br>
-            <input type="password" name="password" placeholder="Придумайте пароль" required><br><br>
-            <button type="submit">Зарегистрироваться</button>
-        </form>
-
-        <RouterLink to="/login">Уже есть аккаунт?</RouterLink>
+  <div class="text-center login-page">
+    <div
+      class="login-form border shadow-sm"
+      :class="[isDark ? 'is-dark border-secondary' : 'border-light']"
+    >
+      <h2 class="mb-4">Регистрация</h2>
+      <form @submit.prevent="handleRegister" class="d-flex flex-column align-items-center">
+        <input class="form-control mb-3" type="text" v-model="username" placeholder="Логин" />
+        <input class="form-control mb-4" type="password" v-model="password" placeholder="Пароль" />
+        <button
+          class="btn"
+          :class="isDark ? 'btn-light' : 'btn-dark'"
+          style="width: 50%"
+          type="submit"
+        >
+          Зарегистрировться
+        </button>
+      </form>
+      <p class="mt-4">
+        <RouterLink to="/register">Уже есть аккаунт?</RouterLink>
+      </p>
+      <p v-if="status">{{ status }}</p>
+      <div style="margin-top: 50px; color: gray">
+        <p>Попробуй ввести в логин: <span style="color: red">' OR 1=1--</span></p>
+      </div>
     </div>
+  </div>
 </template>
 
-<style></style>
+<style scoped lang="scss"></style>
