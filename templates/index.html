@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "layout.html" %}
 {% block content %}
 <div class="row">
@@ -35,3 +36,50 @@
     </div>
 </div>
 {% endblock %}
+=======
+{% extends "layout.html" %} {% block content %}
+<div class="row">
+  <div class="col-md-4">
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        {% if session.get('username') %}
+        <h5 class="card-title">Поделиться мыслью</h5>
+        <form method="POST">
+          <textarea
+            name="content"
+            class="form-control mb-3"
+            rows="3"
+            placeholder="Напиши что-нибудь..."
+          ></textarea>
+          <button type="submit" class="btn btn-primary w-100">
+            Опубликовать
+          </button>
+        </form>
+        {% else %}
+        <div class="text-center py-3">
+          <p class="text-muted">Хотите написать пост?</p>
+          <a href="/login" class="btn btn-outline-primary btn-sm"
+            >Войти в аккаунт</a
+          >
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-8">
+    <h3 class="mb-4 text-secondary">Свежие новости</h3>
+    {% for post in posts %}
+    <div class="card mb-3 border-0 shadow-sm">
+      <div class="card-body">
+        <h6 class="card-subtitle mb-2 text-primary">@{{ post['username'] }}</h6>
+        <p class="card-text">{{ post['content'] | safe }}</p>
+      </div>
+    </div>
+    {% else %}
+    <div class="alert alert-light text-center border">Здесь пока тишина...</div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
+>>>>>>> 3a28698 (сделал api, обработку запроса на странице login(остальные роуты не работают))
