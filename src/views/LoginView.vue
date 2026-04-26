@@ -1,34 +1,12 @@
 <script setup>
-import { ref, computed } from 'vue'
-import api from '@/api'
+import { useAuthForm } from '@/composables/useAuthForm'
 import { isDark } from '@/themeState' // хз насколько норм идея так делать
 import { RouterLink } from 'vue-router'
 
-const username = ref('')
-const password = ref('')
-const status = ref('')
-
-// как будто можно эту функцию вынести в отдельный файл, но читаемость по ощущениям хуевее будет
-const isFormValid = computed(() => {
-  return username.value.trim() != '' && password.value.trim() != ''
-})
-
-// да и эту функцию можно общей сделать, только к апи обращение по разным адресам, просто как атрибут есть варик передавать роут
-const handleLogin = async () => {
-  if (!isFormValid.value) {
-    return (status.value = 'error: Заполните все поля')
-  }
-
-  try {
-    const response = await api.post('/login', {
-      username: username.value,
-      password: password.value,
-    })
-    status.value = 'ok: ' + (response.data.message || 'Вход выполнен')
-  } catch (error) {
-    status.value = 'error: ' + (error.response?.data?.error || 'Сервер недоступен')
-  }
-}
+const { username, password, status, handleSubmit, isFormValid } = useAuthForm(
+  '/login',
+  'Вход выполнен',
+)
 </script>
 
 <template>
@@ -38,7 +16,7 @@ const handleLogin = async () => {
       :class="[isDark ? 'is-dark border-secondary' : 'border-light']"
     >
       <h2 class="mb-4">Авторизация</h2>
-      <form @submit.prevent="handleLogin" class="d-flex flex-column align-items-center">
+      <form @submit.prevent="handleSubmit" class="d-flex flex-column align-items-center">
         <input class="form-control mb-3" type="text" v-model="username" placeholder="Логин" />
         <input class="form-control mb-4" type="password" v-model="password" placeholder="Пароль" />
         <button
