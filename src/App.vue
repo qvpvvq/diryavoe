@@ -1,11 +1,22 @@
 <script setup>
 import { RouterLink } from 'vue-router'
+import { onMounted } from 'vue'
+import api from './api'
 import { isDark, toggleTheme } from '@/themeState'
 import darkThemeIcon from './assets/moon.svg'
 import lightThemeIcon from './assets/sun.svg'
 import { useSessionStore } from './stores/userSession'
 
 const store = useSessionStore()
+
+onMounted(async () => {
+  try {
+    const response = await api.get('/me')
+    store.login(response.data.username, response.data.role)
+  } catch (error) {
+    console.error(error)
+  }
+})
 </script>
 
 <template>
