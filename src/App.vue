@@ -3,6 +3,9 @@ import { RouterLink } from 'vue-router'
 import { isDark, toggleTheme } from '@/themeState'
 import darkThemeIcon from './assets/moon.svg'
 import lightThemeIcon from './assets/sun.svg'
+import { useSessionStore } from './stores/userSession'
+
+const store = useSessionStore()
 </script>
 
 <template>
@@ -15,8 +18,14 @@ import lightThemeIcon from './assets/sun.svg'
           <img class="themeIcon" v-else :src="lightThemeIcon" alt="Light" />
         </button>
         <RouterLink class="nav-link navbarButton" to="/search">Поиск</RouterLink>
-        <RouterLink class="nav-link navbarButton" to="/login">Логин</RouterLink>
-        <RouterLink class="nav-link navbarButton" to="/register">Регистрация</RouterLink>
+        <template v-if="store.isLoggedIn">
+          <span class="nav-link">Привет, {{ store.username }}</span>
+          <button class="nav-link navbarButton" @click="store.logout">Выйти</button>
+        </template>
+        <template v-else>
+          <RouterLink class="nav-link navbarButton" to="/login">Логин</RouterLink>
+          <RouterLink class="nav-link navbarButton" to="/register">Регистрация</RouterLink>
+        </template>
       </div>
     </div>
   </nav>
@@ -40,7 +49,7 @@ import lightThemeIcon from './assets/sun.svg'
 .navbarButton {
   background: none;
   border: none;
-  padding: 4px 8px;
+  padding: auto;
   border-radius: 7px;
 }
 .navbarButton:hover {
