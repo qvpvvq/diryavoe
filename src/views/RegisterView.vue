@@ -6,6 +6,7 @@ import { RouterLink } from 'vue-router'
 const { username, password, status, handleSubmit, isFormValid } = useAuthForm(
   '/register',
   'Аккаунт создан',
+  '/login',
 )
 </script>
 
@@ -32,7 +33,6 @@ const { username, password, status, handleSubmit, isFormValid } = useAuthForm(
       <p class="mt-4">
         <RouterLink to="/login">Уже есть аккаунт?</RouterLink>
       </p>
-      <p v-if="status">{{ status }}</p>
       <div style="margin-top: 50px; color: gray">
         <p>Попробуй ввести в логин: <span style="color: red">' OR 1=1--</span></p>
       </div>

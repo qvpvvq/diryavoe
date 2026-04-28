@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import api from '@/api'
 
 export const useSessionStore = defineStore('session', () => {
   const username = ref('')
@@ -10,7 +11,8 @@ export const useSessionStore = defineStore('session', () => {
     role.value = recievedRole
     isLoggedIn.value = true
   }
-  function logout() {
+  async function logout() {
+    await api.post('/logout')
     username.value = ''
     role.value = ''
     isLoggedIn.value = false

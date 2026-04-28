@@ -10,7 +10,7 @@ const store = useSessionStore()
       <div class="col-md-4">
         <div class="card shadow-sm mb-4">
           <div class="card-body">
-            <template v-if="store.isLoggedIn">
+            <div v-if="store.isLoggedIn">
               <h5 class="card-title">Поделиться мыслью</h5>
               <form method="POST">
                 <textarea
@@ -20,7 +20,7 @@ const store = useSessionStore()
                 ></textarea>
                 <button type="submit" class="btn btn-primary w-100">Опубликовать</button>
               </form>
-            </template>
+            </div>
             <template v-else>
               <div class="text-center py-3">
                 <p class="text-muted">Хотите написать пост?</p>
@@ -32,10 +32,10 @@ const store = useSessionStore()
           </div>
         </div>
       </div>
-    </div>
-    <div class="col-md-8">
-      <h3 class="mb-4 text-secondary">Свежие новости</h3>
-      <div class="alert alert-light text-center border">Здесь пока тишина...</div>
+      <div class="col-md-8">
+        <h3 class="mb-4 text-secondary">Свежие новости</h3>
+        <div class="alert alert-light text-center border">Здесь пока тишина...</div>
+      </div>
     </div>
   </div>
 </template>
