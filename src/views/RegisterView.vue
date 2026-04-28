@@ -3,7 +3,7 @@ import { isDark } from '@/themeState'
 import { useAuthForm } from '@/composables/useAuthForm'
 import { RouterLink } from 'vue-router'
 
-const { username, password, status, handleSubmit, isFormValid } = useAuthForm(
+const { username, password, handleSubmit, isFormValid } = useAuthForm(
   '/register',
   'Аккаунт создан',
   '/login',

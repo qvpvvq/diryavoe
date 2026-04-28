@@ -7,7 +7,6 @@ export function useAuthForm(url, successMessage, redirectTo) {
   const store = useSessionStore()
   const username = ref('')
   const password = ref('')
-  const status = ref(null)
   const router = useRouter()
 
   const handleSubmit = async () => {
@@ -23,11 +22,10 @@ export function useAuthForm(url, successMessage, redirectTo) {
       if (url === '/login') {
         store.login(response.data.user.username, response.data.user.role)
       }
-      status.value = 'ok: ' + (response.data.message || successMessage)
-      console.log(status.value)
+      console.log('ok: ' + (response.data.message || successMessage))
       router.push(redirectTo)
     } catch (error) {
-      status.value = 'error: ' + (error.response?.data?.error || 'Сервер недоступен')
+      console.log('error: ' + (error.response?.data?.error || 'Сервер недоступен'))
     }
   }
 
@@ -42,5 +40,5 @@ export function useAuthForm(url, successMessage, redirectTo) {
     )
   })
 
-  return { username, password, status, handleSubmit, isFormValid }
+  return { username, password, handleSubmit, isFormValid }
 }
