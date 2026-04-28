@@ -6,9 +6,9 @@ export const useSessionStore = defineStore('session', () => {
   const username = ref('')
   const role = ref('')
   const isLoggedIn = ref(false)
-  function login(recievedUsername, recievedRole) {
-    username.value = recievedUsername
-    role.value = recievedRole
+  function login(receivedUsername, receivedRole) {
+    username.value = receivedUsername
+    role.value = receivedRole
     isLoggedIn.value = true
   }
   async function logout() {

@@ -1,9 +1,11 @@
 <script setup>
 import adminPostCard from '@/components/adminPostCard.vue'
 import adminUserCard from '@/components/adminUserCard.vue'
+import { useRouter } from 'vue-router'
 import api from '@/api'
 import { ref, onMounted } from 'vue'
 
+const router = useRouter()
 const posts = ref([])
 const users = ref([])
 onMounted(() => {
@@ -17,6 +19,9 @@ const getAdminData = async () => {
     posts.value = response.data.posts
   } catch (error) {
     console.error(error, error.response?.data?.error || '')
+    if (error.response?.status === 403) {
+      router.replace('/')
+    }
   }
 }
 
@@ -85,5 +90,3 @@ const handleDelete = async (id) => {
     </div>
   </div>
 </template>
-
-<style scoped></style>
