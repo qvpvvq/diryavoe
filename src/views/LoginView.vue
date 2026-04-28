@@ -39,5 +39,3 @@ const { username, password, handleSubmit, isFormValid } = useAuthForm(
     </div>
   </div>
 </template>
-
-<style scoped lang="scss"></style>

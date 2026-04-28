@@ -2,12 +2,15 @@
 import { RouterLink } from 'vue-router'
 import { onMounted } from 'vue'
 import api from './api'
+import searchWindow from './components/searchWindow.vue'
+import { ref } from 'vue'
 import { isDark, toggleTheme } from '@/themeState'
 import darkThemeIcon from './assets/moon.svg'
 import lightThemeIcon from './assets/sun.svg'
 import { useSessionStore } from './stores/userSession'
 
 const store = useSessionStore()
+const isOpen = ref(false)
 
 onMounted(async () => {
   try {
@@ -20,15 +23,23 @@ onMounted(async () => {
 </script>
 
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 navcolor">
+  <nav class="navbar navbar-expand flex-columb flex-md-row navbar-dark bg-dark mb-4 navcolor">
     <div class="container">
       <RouterLink class="navbar-brand" to="/">FakeSocial</RouterLink>
+      <div class="position-relative">
+        <input
+          class="form-control mr-auto searchInput"
+          @focus="isOpen = true"
+          @blur="isOpen = false"
+          placeholder="Поиск"
+        />
+        <searchWindow class="position-absolute" v-show="isOpen"></searchWindow>
+      </div>
       <div class="navbar-nav ms-auto">
         <button @click="toggleTheme" class="nav-link d-flex align-items-center navbarButton">
           <img class="themeIcon" v-if="isDark" :src="darkThemeIcon" alt="Dark" />
           <img class="themeIcon" v-else :src="lightThemeIcon" alt="Light" />
         </button>
-        <RouterLink class="nav-link navbarButton" to="/search">Поиск</RouterLink>
         <template v-if="store.isLoggedIn">
           <span class="nav-link">Привет, {{ store.username }}</span>
           <button class="nav-link navbarButton" @click="store.logout">Выйти</button>
@@ -65,5 +76,9 @@ onMounted(async () => {
 }
 .navbarButton:hover {
   background-color: gray;
+}
+.searchWin {
+  top: 100%;
+  width: 100%;
 }
 </style>

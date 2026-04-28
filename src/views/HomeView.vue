@@ -63,7 +63,7 @@ onMounted(async () => {
         </div>
       </div>
       <div class="col-md-8">
-        <h3 class="mb-4 text-secondary">Свежие новости</h3>
+        <h3 class="mb-4">Свежие новости</h3>
         <template v-if="posts.length">
           <postCard v-for="post in posts" :key="post.id" :post="post"></postCard>
         </template>

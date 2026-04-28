@@ -44,3 +44,17 @@ body.dark-theme {
     }
   }
 }
+.searchInput {
+  max-width: 15vw;
+  background-color: transparent !important;
+  color: white !important;
+  border: 1px solid #6c757d;
+  &::placeholder {
+    color: #adb5bd;
+  }
+  &:focus {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    border-color: #f8f9fa;
+    box-shadow: none;
+  }
+}
