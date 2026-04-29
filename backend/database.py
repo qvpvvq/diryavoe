@@ -1,9 +1,13 @@
 import sqlite3
 from flask import g, current_app
+import os
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 def create_db():
-    db_path = current_app.config.get("DATABASE_URL", "SQLi.db")
+    default_path = os.path.join(BASE_DIR, "SQLi.db")
+    db_path = current_app.config.get("DATABASE_URL", default_path)
 
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
