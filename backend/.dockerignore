@@ -1,0 +1,14 @@
+.venv
+__pycache__
+.env
+.git
+.gitignore
+*.pyc
+*db
+.gitignore
+*.db
+*.db-wal
+*.db-shm
+yourDBName*
+.idea/
+.vscode/
